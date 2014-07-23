@@ -1,0 +1,38 @@
+# Maintainer: Yen Chi Hsuan <yan12125 at gmail dot com>
+
+pkgname=jpexs-decompiler-git
+_pkgname=jpexs-decompiler
+pkgver=2.1.2.r3.gf6969d4
+pkgrel=1
+pkgdesc="Opensource flash SWF decompiler and editor"
+arch=("any")
+url="http://www.free-decompiler.com/flash/"
+license=('GPL3')
+makedepends=('git' 'apache-ant')
+depends=('java-environment')
+source=("${_pkgname}"::'git://github.com/jindrapetrik/jpexs-decompiler')
+md5sums=('SKIP')
+
+pkgver() {
+  local tmp_ver
+  cd "${srcdir}/${_pkgname}"
+  # Use the tag of the last commit
+  tmp_ver=$(git describe --long --tags | sed -E 's/([^-]*-g)/r\1/;s/-/./g')
+  echo ${tmp_ver:7} # cut 'version'
+}
+
+build() {
+    cd "${srcdir}/${_pkgname}"
+    sed -i "s/ffdec\.jar/\/usr\/share\/java\/${_pkgname}\/ffdec\.jar/" "resources/ffdec.sh"
+    ant build
+}
+
+package() {
+    cd "${srcdir}/${_pkgname}"
+    install -Dm755 "resources/ffdec.sh" "${pkgdir}/usr/bin/ffdec"
+    install -Ddm755 "${pkgdir}/usr/share/java/${_pkgname}"
+    for f in dist/* ; do
+        cp -dr --no-preserve=ownership "$f" "${pkgdir}/usr/share/java/${_pkgname}"
+    done
+    install -Dm644 "license.txt" "${pkgdir}/usr/share/licenses/${_pkgname}/license.txt"
+}
