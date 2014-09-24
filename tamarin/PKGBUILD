@@ -3,9 +3,9 @@
 _pkgname=tamarin-redux
 pkgname=${_pkgname}-hg
 pkgver=r7587.5571cf86fc68
-pkgrel=4
+pkgrel=5
 pkgdesc="A high-performance, open source implementation of the ECMAScript 4th edition (ES4) language specification"
-arch=('any')
+arch=('i686' 'x86_64')
 license=('MPL2')
 url='http://www-archive.mozilla.org/projects/tamarin/'
 makedepends=('python2')
