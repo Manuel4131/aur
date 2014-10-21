@@ -9,7 +9,7 @@ arch=('x86_64' 'i686')
 license=('custom')
 url='https://github.com/mvirkkunen/purple-line'
 depends=('libpurple' 'thrift-cpp-git')
-makepedepends=('thrift-base-git')
+makepedepends=('thrift-base-git' 'git')
 source=(
     "${_pkgname}"::"git+http://altrepo.eu/git/purple-line.git/"
     "line-protocol"::"git+http://altrepo.eu/git/line-protocol.git/"
