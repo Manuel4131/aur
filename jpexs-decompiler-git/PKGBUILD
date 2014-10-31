@@ -2,8 +2,8 @@
 
 pkgname=jpexs-decompiler-git
 _pkgname=jpexs-decompiler
-pkgver=2.1.4.r35.gd727dad
-pkgrel=1
+pkgver=3.0.0.r56.gbcfb4a1
+pkgrel=2
 pkgdesc="Opensource flash SWF decompiler and editor"
 arch=("any")
 url="http://www.free-decompiler.com/flash/"
@@ -11,7 +11,7 @@ license=('GPL3')
 makedepends=('git' 'apache-ant')
 depends=('java-environment')
 source=(
-    "${_pkgname}"::'git://github.com/jindrapetrik/jpexs-decompiler'
+    "${_pkgname}"::'git+https://github.com/jindrapetrik/jpexs-decompiler'
 )
 md5sums=(
     'SKIP'
@@ -25,10 +25,14 @@ pkgver() {
   echo ${tmp_ver:7} # cut 'version'
 }
 
-build() {
+prepare() {
     cd "${srcdir}/${_pkgname}"
     sed -i -e "s/ffdec\.jar/\/usr\/share\/java\/${_pkgname}\/ffdec\.jar/" \
            -e "/dirname/d" "resources/ffdec.sh"
+}
+
+build() {
+    cd "${srcdir}/${_pkgname}"
     ant build
 }
 
