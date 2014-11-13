@@ -3,15 +3,15 @@
 
 _pkgname=hhvm
 pkgname=${_pkgname}-git
-pkgver=20141105
-pkgrel=2
+pkgver=20141112
+pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
 url="http://hhvm.com"
 license=('PHP')
 depends=('boost-libs' 'google-glog' 'libmysqlclient' 'libmemcached' 'pcre' 'gd'
          'libxml2' 'libxslt' 'intel-tbb' 'libmcrypt' 'oniguruma' 'curl'
-         'libdwarf-git' 'imagemagick' 'libedit')
+         'libdwarf' 'imagemagick' 'libedit')
 makedepends=('git' 'cmake' 'gcc' 'boost' 'python2')
 source=("git+https://github.com/facebook/hhvm"
         "git+https://github.com/hhvm/hhvm-third-party"
