@@ -1,4 +1,4 @@
-*.pkg.tar*
-*.src.tar*
+*.tar*
+*.tar*
 pkg/
 src/
