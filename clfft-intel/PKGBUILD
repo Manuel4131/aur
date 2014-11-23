@@ -1,5 +1,5 @@
 # Maintainer: Yen Chi Hsuan <yan12125 at gmail.com>
-# Maintainer: jdarch <jda -dot- cloud -plus- archlinux -at- gmail -dot- com>
+# Contributor: jdarch <jda -dot- cloud -plus- archlinux -at- gmail -dot- com>
 
 _pkgname=clfft-intel
 pkgname=${_pkgname}-git
