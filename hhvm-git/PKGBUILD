@@ -1,9 +1,10 @@
+# Maintainer: Yen Chi Hsuan <yan12125 at gmail dot com>
 # Maintainer: Massimiliano Torromeo <massimiliano.torromeo@gmail.com>
 # Contributor: James Miller <james@pocketrent.com>
 
 _pkgname=hhvm
 pkgname=${_pkgname}-git
-pkgver=20141112
+pkgver=20141219
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -17,24 +18,15 @@ source=("git+https://github.com/facebook/hhvm"
         "git+https://github.com/hhvm/hhvm-third-party"
         "git+https://github.com/facebook/folly"
         "git+https://github.com/facebook/fbthrift"
-        'third-party.patch'
         'hhvm.tmpfile'
-        'hhvm@.service'
-        'static.mime-types.hdf'
-        'default.hdf'
-        'server.hdf')
+        'hhvm@.service')
 sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
-            'f2be28dbc9a337bb1632bdef10c84b80b4ba1ef86ab36a6995e8b835c3883233'
             'cabf505fa85e33d7149f90fae95c6f67d5148895fc6efa353b21a3b31c1c3ec6'
-            '8681582439385807fd0f8caff780953d3049de93218ac785c48f6df4f4296bce'
-            '8b9f1dcb0a2fc7d3657e70b880425eccb963e0566247d99d26513d141e84a937'
-            '6d48e6bdc546d60a9770d507366ad23702f9997613cbe355d76463e0bf052f68'
-            'ba82950161ff38e634841360d7e15cf5314f233ed4d97b02c18e0ba9f7a3f560')
+            'ac1d695805b3a0223fc33139ae941a00f8e78db321a943c51aa966d2e12e342b')
 install=hhvm.install
-backup=(etc/hhvm/{conf.d/default,conf.d/static.mime-types,server}.hdf)
 options+=('!buildflags') # default flags cause libdwarf failed to link
 
 pkgver() {
@@ -54,13 +46,6 @@ prepare() {
     git config submodule.folly.url "${srcdir}/folly"
     git config submodule.thrift/src.url "${srcdir}/fbthrift"
     git submodule update
-
-    cd "${srcdir}/${_pkgname}"
-
-    msg2 "Remove pcre"
-    cd $srcdir/${_pkgname}/third-party
-    patch -p1 -i "$srcdir"/third-party.patch
-    rm -rv pcre
 }
 
 build() {
@@ -89,10 +74,6 @@ package() {
     cd "$srcdir"
     install -Dm644 hhvm.tmpfile "$pkgdir"/usr/lib/tmpfiles.d/hhvm.conf
     install -Dm644 hhvm@.service "$pkgdir"/usr/lib/systemd/system/hhvm@.service
-
-    install -Dm644 static.mime-types.hdf "$pkgdir"/etc/hhvm/conf.d/static.mime-types.hdf
-    install -Dm644 default.hdf "$pkgdir"/etc/hhvm/conf.d/default.hdf
-    install -Dm644 server.hdf "$pkgdir"/etc/hhvm/server.hdf
 
     install -dm755 -o http "$pkgdir"/var/log/hhvm
 }
