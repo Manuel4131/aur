@@ -4,8 +4,8 @@
 
 _pkgname=hhvm
 pkgname=${_pkgname}-git
-pkgver=20141223
-pkgrel=1
+pkgver=20141224
+pkgrel=2
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
 url="http://hhvm.com"
@@ -28,14 +28,14 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'c049b53f5ca7f8384d3b0a9d257018770b3a171f3b7ae8865cbb2c402a26b5e9'
-            '229c57de4f694d3490ceac303ae4005951c4af91e7825a4a5461d47abc18c09a'
-            '94c529aa101897e193715fd3b926c5d7fd4f8644f6cb075a47d020fd0e5e7e59'
+            'dddf4325926a41b3f1b5a41a1a42364ee463ab627f9d9b05ccf7c4660af3a51c'
+            'bca85e0445f3e26df65876c52e507aec8146cd31cce12c82846b55705529caed'
             '66ae41fb6ef07dd02a9c959ab6b6e07bcb1d17b0c164a091fc5ecd9dc7967cd0')
 
 install=hhvm.install
 options+=('!buildflags') # default flags cause libdwarf failed to link
 
-_EXTRA_COMPONENTS=('hackificator' 'remove_soft_types' 'augmented_types')
+_EXTRA_COMPONENTS=('hackificator' 'remove_soft_types')
 
 pkgver() {
     cd "${srcdir}/${_pkgname}"
@@ -57,11 +57,9 @@ prepare() {
 }
 
 build() {
-    cd "$srcdir"/${_pkgname}
+    cd "${srcdir}/${_pkgname}"
     msg2 "Building hhvm"
 
-    # comment for tests
-    HPHP_NOTEST=1 \
     cmake \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_PREFIX_PATH="$srcdir" \
@@ -69,7 +67,7 @@ build() {
 
     make
 
-    cd "$srcdir"/${_pkgname}
+    cd "${srcdir}/${_pkgname}/hphp/hack/tools"
     msg2 "Building extra components"
 
     for tool in "${_EXTRA_COMPONENTS[@]}"
@@ -80,6 +78,11 @@ build() {
         make
         popd
     done
+
+    pushd augmented_types
+    make clean
+    make
+    popd
 }
 
 # check() {
@@ -91,13 +94,22 @@ package() {
     cd "${srcdir}/${_pkgname}"
     make DESTDIR="$pkgdir/" install
 
-    cd "$srcdir"
-    install -Dm644 hhvm.tmpfile "$pkgdir"/usr/lib/tmpfiles.d/hhvm.conf
-    install -Dm644 hhvm@.service "$pkgdir"/usr/lib/systemd/system/hhvm@.service
-    install -Dm644 server.ini "$pkgdir"/etc/hhvm/server.ini
-    install -Dm644 systemd-server.conf "$pkgdir"/etc/hhvm/systemd-server.conf
+    msg2 "Install extra components"
+    cd "${srcdir}/${_pkgname}/hphp/hack/bin/tools"
+    for tool in *
+    do
+        install -Dm755 "${tool}" "${pkgdir}/usr/bin/${tool}"
+    done
 
-    install -Ddm755 -o http "$pkgdir"/var/log/hhvm
-    install -Ddm755 -o http "$pkgdir"/var/lib/hhvm
+    cd "${srcdir}/${_pkgname}/hphp/hack/tools/augmented_types/_build"
+    install -Dm755 augmented_types.native "${pkgdir}/usr/bin/augmented_types"
+
+    cd "${srcdir}"
+    install -Dm644 hhvm.tmpfile "${pkgdir}/usr/lib/tmpfiles.d/hhvm.conf"
+    install -Dm644 hhvm@.service "${pkgdir}/usr/lib/systemd/system/hhvm@.service"
+    install -Dm644 server.ini "${pkgdir}/etc/hhvm/server.ini"
+    install -Dm644 systemd-server.conf "${pkgdir}/etc/hhvm/systemd-server.conf"
+
+    install -Ddm755 -o http "${pkgdir}/var/log/hhvm"
+    install -Ddm755 -o http "${pkgdir}/var/lib/hhvm"
 }
-
