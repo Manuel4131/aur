@@ -1,0 +1,4 @@
+Dependencies of bypy-git
+k-map does not require wxwebview
+java-runtime vs. java-environment (#24296)
+mingw support (#43552)
