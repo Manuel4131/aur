@@ -3,10 +3,10 @@
 _pkgname=purple-line
 pkgname=${_pkgname}-git
 pkgver=20140616
-pkgrel=4
+pkgrel=5
 pkgdesc="Line plugin for pidgin (libpurple)"
 arch=('x86_64' 'i686')
-license=('custom')
+license=('unknown')
 url='https://github.com/mvirkkunen/purple-line'
 depends=('libpurple' 'thrift')
 makedepends=('git' 'boost')
