@@ -2,7 +2,7 @@
 # Contributor: cuihao <cuihao dot leo at gmail dot com>
 
 pkgname=firefox-adblock-plus-hg
-pkgver=3895
+pkgver=3906
 pkgrel=1
 pkgdesc="plugin for firefox which disables script (mercurial developing version)"
 arch=('any')
