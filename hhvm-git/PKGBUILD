@@ -5,7 +5,7 @@
 _pkgname=hhvm
 _github_addr=facebook/hhvm
 pkgname=${_pkgname}-git
-pkgver=20150310
+pkgver=20150312
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -112,10 +112,10 @@ build() {
     popd
 }
 
-# check() {
-#    cd "${srcdir}/${_pkgname}/hphp/test"
-#     ./run --threads 2 quick
-# }
+check() {
+   cd "${srcdir}/${_pkgname}/hphp/test"
+    ./run --threads 2 quick
+}
 
 package() {
     cd "${srcdir}/${_pkgname}"
