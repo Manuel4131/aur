@@ -23,3 +23,5 @@ echo nodejs-jpm
 source ./nodejs-jpm/PKGBUILD
 echo PKGBUILD version = $pkgver
 echo Upstream version = `python ./scripts/npmjs.py jpm`
+
+source check_github.sh
