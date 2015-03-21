@@ -5,7 +5,7 @@
 _pkgname=hhvm
 _github_addr=facebook/hhvm
 pkgname=${_pkgname}-git
-pkgver=20150312
+pkgver=20150320
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -27,7 +27,8 @@ depends=('boost-libs'
          'libyaml'
          'oniguruma'
          'php'
-         'sqlite')
+         'sqlite'
+         'unixodbc')
 # curl included in php
 # gd is bundled in hphp/runtime/ext/gd/libgd
 # libxml2 included in libxslt
@@ -55,7 +56,6 @@ sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
             '66ae41fb6ef07dd02a9c959ab6b6e07bcb1d17b0c164a091fc5ecd9dc7967cd0')
 
 install=hhvm.install
-options+=('!buildflags') # default flags cause libdwarf failed to link
 
 _EXTRA_COMPONENTS=('hackificator' 'remove_soft_types')
 
