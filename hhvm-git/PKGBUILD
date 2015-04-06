@@ -5,8 +5,8 @@
 _pkgname=hhvm
 _github_addr=facebook/hhvm
 pkgname=${_pkgname}-git
-pkgver=20150322
-pkgrel=2
+pkgver=20150406
+pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
 url="http://hhvm.com"
