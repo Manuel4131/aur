@@ -19,6 +19,21 @@ source ./python2-pylzma/PKGBUILD
 echo PKGBUILD version = $pkgver
 echo Upstream version = `python ./scripts/pypi.py pylzma`
 
+echo python-pysvn
+source ./python-pysvn/PKGBUILD
+echo PKGBUILD version = $pkgver
+echo Upstream version = Unavailable
+
+echo python-svn
+source ./python-svn/PKGBUILD
+echo PKGBUILD version = $pkgver
+echo Upstream version = `python ./scripts/pypi.py svn`
+
+echo python-texttable
+source ./python-texttable/PKGBUILD
+echo PKGBUILD version = $pkgver
+echo Upstream version = `python ./scripts/pypi.py texttable`
+
 echo nodejs-jpm
 source ./nodejs-jpm/PKGBUILD
 echo PKGBUILD version = $pkgver
