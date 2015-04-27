@@ -8,3 +8,4 @@
 /hhvm/
 /hhvm-third-party/
 /libvpx-1.4.0.patch
+/re2-c++11.patch

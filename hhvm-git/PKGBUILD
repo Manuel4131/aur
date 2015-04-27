@@ -5,7 +5,7 @@
 _pkgname=hhvm
 _github_addr=facebook/hhvm
 pkgname=${_pkgname}-git
-pkgver=20150420
+pkgver=20150424
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -47,7 +47,8 @@ source=("git+https://github.com/$_github_addr" #1
         'hhvm@.service'
         'server.ini'
         'systemd-server.conf'
-        'libvpx-1.4.0.patch'::'https://patch-diff.githubusercontent.com/raw/facebook/hhvm/pull/5191.patch')
+        'libvpx-1.4.0.patch'::'https://patch-diff.githubusercontent.com/raw/facebook/hhvm/pull/5191.patch'
+        're2-c++11.patch'::'https://github.com/google/re2/commit/7d502a5ba41476f935bdb965f0d68c7ce01979cd.patch')
 backup=('etc/hhvm/server.ini' 'etc/hhvm/systemd-server.conf')
 sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
             'SKIP' 'SKIP' 'SKIP' 'SKIP'
@@ -55,7 +56,8 @@ sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
             'dddf4325926a41b3f1b5a41a1a42364ee463ab627f9d9b05ccf7c4660af3a51c'
             'bca85e0445f3e26df65876c52e507aec8146cd31cce12c82846b55705529caed'
             '66ae41fb6ef07dd02a9c959ab6b6e07bcb1d17b0c164a091fc5ecd9dc7967cd0'
-            'c6b4dbcd4916a4386a019474803675d94625fab1940f97b6b679af8a45872305')
+            'c6b4dbcd4916a4386a019474803675d94625fab1940f97b6b679af8a45872305'
+            '890abe8061434a7318110abfaba9b1a777aec6e1344ecc9509ce82a704bcf8be')
 
 install=hhvm.install
 
@@ -86,6 +88,9 @@ prepare() {
 
     cd "${srcdir}/${_pkgname}"
     patch -p1 -i ../libvpx-1.4.0.patch
+
+    cd "${srcdir}/${_pkgname}/third-party/re2/src"
+    patch -p1 -i ../../../../re2-c++11.patch
 }
 
 build() {
@@ -96,6 +101,9 @@ build() {
     # becuase the server may not be running when building
     # The path listed here is copied from PKGBUILD of extra/mariadb
     # If you use a custom path setting in my.cnf, please change it
+
+    # -Wno-bool-compare: See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65882
+    CXXFLAGS="-Wno-bool-compare" \
     cmake \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_LIBDIR=lib \
