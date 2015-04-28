@@ -5,7 +5,7 @@
 _pkgname=hhvm
 _github_addr=facebook/hhvm
 pkgname=${_pkgname}-git
-pkgver=20150424
+pkgver=20150428
 pkgrel=1
 pkgdesc="Virtual Machine, Runtime, and JIT for PHP"
 arch=('x86_64')
@@ -48,7 +48,8 @@ source=("git+https://github.com/$_github_addr" #1
         'server.ini'
         'systemd-server.conf'
         'libvpx-1.4.0.patch'::'https://patch-diff.githubusercontent.com/raw/facebook/hhvm/pull/5191.patch'
-        're2-c++11.patch'::'https://github.com/google/re2/commit/7d502a5ba41476f935bdb965f0d68c7ce01979cd.patch')
+        're2-c++11.patch'::'https://github.com/google/re2/commit/7d502a5ba41476f935bdb965f0d68c7ce01979cd.patch'
+        'latomic_check.patch'::'https://patch-diff.githubusercontent.com/raw/facebook/hhvm/pull/5218.patch')
 backup=('etc/hhvm/server.ini' 'etc/hhvm/systemd-server.conf')
 sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
             'SKIP' 'SKIP' 'SKIP' 'SKIP'
@@ -57,7 +58,8 @@ sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP'
             'bca85e0445f3e26df65876c52e507aec8146cd31cce12c82846b55705529caed'
             '66ae41fb6ef07dd02a9c959ab6b6e07bcb1d17b0c164a091fc5ecd9dc7967cd0'
             'c6b4dbcd4916a4386a019474803675d94625fab1940f97b6b679af8a45872305'
-            '890abe8061434a7318110abfaba9b1a777aec6e1344ecc9509ce82a704bcf8be')
+            '890abe8061434a7318110abfaba9b1a777aec6e1344ecc9509ce82a704bcf8be'
+            '2cba66260e367c22d7ea138051638946f1a31fd18655f64f26e32d4fb7ca8faa')
 
 install=hhvm.install
 
@@ -88,6 +90,7 @@ prepare() {
 
     cd "${srcdir}/${_pkgname}"
     patch -p1 -i ../libvpx-1.4.0.patch
+    patch -p1 -i ../latomic_check.patch
 
     cd "${srcdir}/${_pkgname}/third-party/re2/src"
     patch -p1 -i ../../../../re2-c++11.patch
@@ -105,6 +108,7 @@ build() {
     # -Wno-bool-compare: See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65882
     CXXFLAGS="-Wno-bool-compare" \
     cmake \
+        # -DCMAKE_BUILD_TYPE=Debug \
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DCMAKE_PREFIX_PATH="$srcdir" \
